@@ -38,30 +38,30 @@ public class Group {
 		if(this.id == 0) {
 			String sql = "INSERT INTO user_group(name) VALUES(?);";
 			String[] generatedColumns ={"ID"};
-			PreparedStatement preparedStatement = conn.prepareStatement(sql, generatedColumns);
-			preparedStatement.setString(1, this.name);
-			preparedStatement.executeUpdate();
-			ResultSet resultSet = preparedStatement.getGeneratedKeys();
+			PreparedStatement ps = conn.prepareStatement(sql, generatedColumns);
+			ps.setString(1, this.name);
+			ps.executeUpdate();
+			ResultSet resultSet = ps.getGeneratedKeys();
 			if (resultSet.next()) {
 				this.id = resultSet.getInt(1);
 			}
 			resultSet.close();
-			preparedStatement.close();
+			ps.close();
 		} else {
 			String sql = "UPDATE user_group SET name=? WHERE id=?;";
-			PreparedStatement preparedStatement = conn.prepareStatement(sql);
-			preparedStatement.setString(1, this.name);
-			preparedStatement.setLong(2, this.id);
-			preparedStatement.executeUpdate();
-			preparedStatement.close();
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, this.name);
+			ps.setLong(2, this.id);
+			ps.executeUpdate();
+			ps.close();
 		}
 	}
 	
 	static public Group loadGroupById(Connection conn, int id) throws SQLException {
 		String sql = "SELECT * FROM user_group where id=?;";
-		PreparedStatement preparedStatement = conn.prepareStatement(sql);
-		preparedStatement.setInt(1, id);
-		ResultSet resultSet = preparedStatement.executeQuery();
+		PreparedStatement ps = conn.prepareStatement(sql);
+		ps.setInt(1, id);
+		ResultSet resultSet = ps.executeQuery();
 		if (resultSet.next()) {
 			Group loadedGroup = new Group();
 			loadedGroup.id = resultSet.getInt("id");
